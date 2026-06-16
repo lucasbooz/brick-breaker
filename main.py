@@ -27,7 +27,6 @@ cores = {
     "vermelho": (220, 50,  50),
 }
 
-# Uma cor para cada linha de blocos (lista, acessada por índice numérico)
 cores_blocos = [
     cores["vermelho"],
     cores["amarela"],
@@ -37,9 +36,8 @@ cores_blocos = [
 ]
 
 # ── Estado global do jogo ──────────────────────────────────────────────────────
-# Possíveis valores: "inicio", "jogando", "fim"
 estado = "inicio"
-motivo_fim = ""  # "vitoria" ou "derrota" — usado pra mostrar mensagem certa
+motivo_fim = ""
 
 bola = pygame.Rect(100, 500, tamanho_bola, tamanho_bola)
 jogador = pygame.Rect(350, 750, tamanho_jogador, 15)
@@ -73,7 +71,6 @@ def criar_blocos(qtde_blocos_linha, qtde_linhas_blocos):
 
 
 def reiniciar_jogo():
-    """Reseta todas as variáveis para o estado inicial, permitindo jogar de novo."""
     global bola, jogador, blocos, movimento_bola, velocidade_jogador, ultima_pontuacao_acelerada, vidas
     bola = pygame.Rect(100, 500, tamanho_bola, tamanho_bola)
     jogador = pygame.Rect(350, 750, tamanho_jogador, 15)
@@ -86,7 +83,6 @@ def reiniciar_jogo():
 
 # ── Funções de desenho ─────────────────────────────────────────────────────────
 def desenhar_tela_inicio():
-    """Tela inicial: título e instrução para começar."""
     tela.fill(cores["preta"])
 
     fonte_titulo = pygame.font.Font(None, 80)
@@ -96,14 +92,12 @@ def desenhar_tela_inicio():
     sub = fonte_sub.render("Pressione ENTER para jogar", True, cores["cinza"])
     teclas = fonte_sub.render("← → para mover a prancha", True, cores["cinza"])
 
-    # centraliza os textos na tela
     tela.blit(titulo, titulo.get_rect(center=(tamanho_tela[0] // 2, 320)))
     tela.blit(sub,    sub.get_rect(center=(tamanho_tela[0] // 2, 430)))
     tela.blit(teclas, teclas.get_rect(center=(tamanho_tela[0] // 2, 475)))
 
 
 def desenhar_tela_fim(motivo):
-    """Tela de fim: mostra vitória ou derrota e opção de jogar de novo."""
     tela.fill(cores["preta"])
 
     fonte_titulo = pygame.font.Font(None, 80)
@@ -153,7 +147,6 @@ def movimentar_bola(bola):
     bola.x += int(movimento[0])
     bola.y += int(movimento[1])
 
-    # paredes
     if bola.x <= 0:
         movimento[0] = abs(movimento[0])
     if bola.x + tamanho_bola >= tamanho_tela[0]:
@@ -164,18 +157,15 @@ def movimentar_bola(bola):
         global vidas
         vidas -= 1
         if vidas <= 0:
-            return None  # sem vidas restantes → game over
-        # ainda tem vidas: reposiciona a bola e continua jogando
+            return None
         bola.x, bola.y = 100, 500
         movimento[0] = abs(movimento[0])
         movimento[1] = -abs(movimento[1])
         return movimento
 
-    # raquete
     if jogador.colliderect(bola):
         movimento[1] = -abs(movimento[1])
 
-    # blocos
     for item in blocos:
         bloco, cor = item
         if bloco.colliderect(bola):
@@ -219,7 +209,7 @@ def aumentar_velocidade(pontuacao):
 
 
 # ── Loop principal ─────────────────────────────────────────────────────────────
-reiniciar_jogo()  # inicializa os objetos antes de entrar no loop
+reiniciar_jogo()
 
 while True:
     # ── Tela de início ──
@@ -230,7 +220,7 @@ while True:
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_RETURN:  # ENTER → começa o jogo
+                if evento.key == pygame.K_RETURN:
                     estado = "jogando"
 
     # ── Jogando ──
@@ -251,10 +241,10 @@ while True:
         movimentar_jogador()
         movimento_bola = movimentar_bola(bola)
 
-        if not movimento_bola:           # bola caiu
+        if not movimento_bola:
             motivo_fim = "derrota"
             estado = "fim"
-        elif len(blocos) == 0:           # todos os blocos destruídos
+        elif len(blocos) == 0:
             motivo_fim = "vitoria"
             estado = "fim"
 
@@ -266,10 +256,10 @@ while True:
                 pygame.quit()
                 exit()
             if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_RETURN:  # ENTER → jogar de novo
+                if evento.key == pygame.K_RETURN:
                     reiniciar_jogo()
                     estado = "jogando"
-                if evento.key == pygame.K_ESCAPE:  # ESC → sair
+                if evento.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()
 
