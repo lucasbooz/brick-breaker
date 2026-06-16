@@ -90,7 +90,7 @@ def desenhar_tela_inicio():
 
     titulo = fonte_titulo.render("BRICK BREAKER", True, cores["amarela"])
     sub = fonte_sub.render("Pressione ENTER para jogar", True, cores["cinza"])
-    teclas = fonte_sub.render("← → para mover a prancha", True, cores["cinza"])
+    teclas = fonte_sub.render("< > para mover a prancha", True, cores["cinza"])
 
     tela.blit(titulo, titulo.get_rect(center=(tamanho_tela[0] // 2, 320)))
     tela.blit(sub,    sub.get_rect(center=(tamanho_tela[0] // 2, 430)))
