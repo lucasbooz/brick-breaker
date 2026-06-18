@@ -1,7 +1,31 @@
 import pygame
 import math
+import numpy as np
 
 pygame.init()
+pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
+
+# ── Sons sintéticos ────────────────────────────────────────────────────────────
+
+
+def gerar_som(frequencia, duracao, volume=0.3):
+    sample_rate = 44100
+    frames = int(duracao * sample_rate)
+    t = np.linspace(0, duracao, frames)
+    onda = np.sin(2 * np.pi * frequencia * t)
+    fade = int(frames * 0.1)
+    onda[-fade:] *= np.linspace(1, 0, fade)
+    onda = (onda * volume * 32767).astype(np.int16)
+    onda_stereo = np.column_stack([onda, onda])
+    return pygame.sndarray.make_sound(onda_stereo)
+
+
+som_raquete = gerar_som(frequencia=300, duracao=0.08)
+som_bloco = gerar_som(frequencia=600, duracao=0.06)
+som_vida = gerar_som(frequencia=120, duracao=0.4)
+som_vitoria = gerar_som(frequencia=900, duracao=0.5,
+                        volume=0.4)
+
 
 # ── Configurações da tela ──────────────────────────────────────────────────────
 tamanho_tela = (800, 800)
@@ -156,6 +180,7 @@ def movimentar_bola(bola):
     if bola.y + tamanho_bola >= tamanho_tela[1]:
         global vidas
         vidas -= 1
+        som_vida.play()
         if vidas <= 0:
             return None
         bola.x, bola.y = 100, 500
@@ -165,11 +190,13 @@ def movimentar_bola(bola):
 
     if jogador.colliderect(bola):
         movimento[1] = -abs(movimento[1])
+        som_raquete.play()
 
     for item in blocos:
         bloco, cor = item
         if bloco.colliderect(bola):
             blocos.remove(item)
+            som_bloco.play()
             overlap_x = min(bola.right, bloco.right) - \
                 max(bola.left, bloco.left)
             overlap_y = min(bola.bottom, bloco.bottom) - \
@@ -245,6 +272,7 @@ while True:
             motivo_fim = "derrota"
             estado = "fim"
         elif len(blocos) == 0:
+            som_vitoria.play()
             motivo_fim = "vitoria"
             estado = "fim"
 

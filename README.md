@@ -31,7 +31,7 @@ O projeto começou a partir de um tutorial e está sendo evoluído continuamente
 - [x] Controle de FPS consistente (60 FPS)
 - [ ] Power-ups (bola múltipla, prancha grande/pequena, bola de fogo)
 - [ ] Níveis com disposição aleatória de blocos
-- [ ] Efeitos sonoros
+- [x] Efeitos sonoros
 - [ ] Menu de configurações
 
 ## 🔧 Tecnologias
