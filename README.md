@@ -30,9 +30,9 @@ O projeto começou a partir de um tutorial e está sendo evoluído continuamente
 - [x] Colisões precisas com detecção de lado (cima/baixo/lateral)
 - [x] Controle de FPS consistente (60 FPS)
 - [ ] Power-ups (bola múltipla, prancha grande/pequena, bola de fogo)
-- [ ] Níveis com disposição aleatória de blocos
+- [x] Níveis com disposição aleatória de blocos
 - [x] Efeitos sonoros
-- [ ] Menu de configurações
+- [x] Menu de configurações
 
 ## 🔧 Tecnologias
 
